@@ -35,11 +35,24 @@ $usuarios = $userController->getAllClient();
                 <td>
                     <!-- Link para Editar, direcionando para uma página ou endpoint de edição -->
                     <a href="../cadastrar/index.php?id=<?php echo $usuario['id']; ?>"><button>Editar</button></a>
-                    
+                <form method="POST">
+                    <input type="hidden" name="id_usuario" value="<?php echo $usuario['id']; ?>">
+                    <button type="submit" name="deletar">Deletar</button>
+                </form>
                 </td>
             </tr>
         <?php endforeach; ?>
     </table>
 </body>
-
 </html>
+
+<?php
+if (isset($_POST['deletar'])) {
+    if (isset($_POST['id_usuario'])) {
+        $id_usuario = $_POST['id_usuario'];
+        $userController->deleteUser($id_usuario);
+        header('Location: '.$_SERVER['PHP_SELF']);
+    }
+}
+
+?>
