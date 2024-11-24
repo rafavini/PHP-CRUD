@@ -13,8 +13,8 @@ $usuario = [
     'nome' => '',
     'email' => ''
 ];
-$buttonTitle = "";
-// Verifica se é edição
+$buttonTitle = "Cadastrar";
+
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $buttonTitle = "Atualizar";
@@ -23,49 +23,55 @@ if (isset($_GET['id'])) {
         echo "Usuário não encontrado.";
         exit();
     }
-}else{
-    $buttonTitle = "Cadastrar";
 }
 
-// Lógica para processar o formulário
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nome = $_POST['nome'];
-    $email = $_POST['email'];
-    
-    if (isset($_GET['id'])) {
-        // Editar usuário
-        $userController->updateUser($_GET['id'], $nome, $email);
+    $nome = trim($_POST['nome']);
+    $email = trim($_POST['email']);
+
+    if (empty($nome) || empty($email)) {
+        $error_message = "Por favor, preencha todos os campos.";
     } else {
-        // Cadastrar novo usuário
-        $userController->createUser($nome, $email);
+        // Editar ou criar usuário
+        if (isset($_GET['id'])) {
+            $userController->updateUser($_GET['id'], $nome, $email);
+        } else {
+            $userController->createUser($nome, $email);
+        }
+        header("location: ../home/index.php");
+        exit();
     }
-    header("location: ../home/index.php");
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($_GET['id']) ? 'Editar Usuário' : 'Cadastrar Usuário'; ?></title>
+    <link rel="stylesheet" href="./cadastrar.css">
 </head>
+
 <body>
+    <div class="container">
+        <h2><?php echo isset($_GET['id']) ? 'Editar Usuário' : 'Cadastrar Usuário'; ?></h2>
 
-<h2><?php echo isset($_GET['id']) ? 'Editar Usuário' : 'Cadastrar Usuário'; ?></h2>
+        <?php if (isset($error_message)) { ?>
+            <div class="error-message"><?php echo $error_message; ?></div>
+        <?php } ?>
 
-<form method="POST">
+        <form method="POST">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" value="<?php echo htmlspecialchars($usuario['nome']); ?>" required>
 
-    <label for="nome">Nome:</label>
-    <input type="text" id="nome" name="nome" value="<?php echo htmlspecialchars($usuario['nome']); ?>" required>
-    <br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($usuario['email']); ?>" required>
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($usuario['email']); ?>" required>
-    <br>
-
-    <button type="submit"><?php echo $buttonTitle;?></button>
-</form>
-
+            <button type="submit"><?php echo $buttonTitle; ?></button>
+        </form>
+    </div>
 </body>
+
 </html>
