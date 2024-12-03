@@ -12,19 +12,16 @@ $usuarios = $userController->getAllClient();
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Lista de Usuários</title>
     <link rel="stylesheet" href="./home.css">
 </head>
-
 <body>
-    <div class="container">
+<div class="container">
         <a href="../cadastrar/index.php" class="button">Cadastrar</a>
         <h2>Lista de Usuários</h2>
-
         <table>
             <thead>
                 <tr>
@@ -42,7 +39,8 @@ $usuarios = $userController->getAllClient();
                         <td><?php echo htmlspecialchars($usuario['email']); ?></td>
                         <td class="action-buttons">
                             <a href="../cadastrar/index.php?id=<?php echo $usuario['id']; ?>" class="button">Editar</a>
-                            <form method="POST">
+
+                            <form action="../../backend/router/userRouter.php?acao=deletar" method="POST">
                                 <input type="hidden" name="id_usuario" value="<?php echo $usuario['id']; ?>">
                                 <button type="submit" name="deletar" class="button deletar-button">Deletar</button>
                             </form>
@@ -54,16 +52,6 @@ $usuarios = $userController->getAllClient();
             </tbody>
         </table>
     </div>
+
 </body>
 </html>
-
-<?php
-if (isset($_POST['deletar'])) {
-    if (isset($_POST['id_usuario'])) {
-        $id_usuario = $_POST['id_usuario'];
-        $userController->deleteUser($id_usuario);
-        header('Location: '.$_SERVER['PHP_SELF']);
-    }
-}
-
-?>

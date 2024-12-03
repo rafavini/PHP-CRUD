@@ -13,7 +13,7 @@ class LoginController
     }
 
     public function ValidaSenha($email, $nome)
-    {
+    {   
         try {
             $sql = "SELECT * FROM usuarios WHERE email = :email AND nome = :nome";
             $db = $this->conn->prepare($sql);
@@ -21,6 +21,7 @@ class LoginController
             $db->bindParam(":nome", $nome);
             $db->execute();
             $users = $db->fetchAll(PDO::FETCH_ASSOC);
+            var_dump($users);
 
             if ($users) {
                 session_start();

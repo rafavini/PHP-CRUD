@@ -13,33 +13,16 @@ $usuario = [
     'nome' => '',
     'email' => ''
 ];
+$acao = "create";
 $buttonTitle = "Cadastrar";
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $buttonTitle = "Atualizar";
+    $acao = "update";
     $usuario = $userController->getUserById($id);
     if (!$usuario) {
         echo "Usuário não encontrado.";
-        exit();
-    }
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nome = trim($_POST['nome']);
-    $email = trim($_POST['email']);
-
-    if (empty($nome) || empty($email)) {
-        $error_message = "Por favor, preencha todos os campos.";
-    } else {
-        // Editar ou criar usuário
-        if (isset($_GET['id'])) {
-            $userController->updateUser($_GET['id'], $nome, $email);
-        } else {
-            $userController->createUser($nome, $email);
-        }
-        header("location: ../home/index.php");
-        exit();
     }
 }
 ?>
@@ -62,7 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="error-message"><?php echo $error_message; ?></div>
         <?php } ?>
 
-        <form method="POST">
+        <form action="<?php echo "../../backend/router/userRouter.php?acao=$acao" ?>" method="POST">
+            <input type="hidden" name="usuarioId" value="<?php echo $usuario["id"]; ?>">
             <label for="nome">Nome:</label>
             <input type="text" id="nome" name="nome" value="<?php echo htmlspecialchars($usuario['nome']); ?>" required>
 
