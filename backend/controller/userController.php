@@ -34,7 +34,6 @@ class UserController
 
     public function getUserById($id)
     {
-
         try {
             // Prepara e executa a consulta
             $sql = "SELECT * FROM usuarios WHERE id = :id";
@@ -104,4 +103,14 @@ class UserController
             return false;
         }
     }
+
+    public function getUsersByPage($offset, $limit) {
+        $sql = "SELECT * FROM usuarios ORDER BY id ASC LIMIT :limit OFFSET :offset";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
 }

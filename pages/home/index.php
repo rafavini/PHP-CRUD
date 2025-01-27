@@ -7,6 +7,7 @@ if (!isset($_SESSION["id_usuario"])) {
 require_once __DIR__ . '/../../backend/controller/userController.php';
 
 $userController = new UserController();
+
 $usuarios = $userController->getAllClient();
 ?>
 
@@ -52,6 +53,5 @@ $usuarios = $userController->getAllClient();
             </tbody>
         </table>
     </div>
-
 </body>
 </html>

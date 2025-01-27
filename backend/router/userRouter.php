@@ -22,11 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $output = $userController->updateUser($_POST["usuarioId"], $_POST["nome"], $_POST["email"]);
             header('Location: ../../pages/home/index.php');
             break;
-
-        case 'delete':
-            $output = $userController->deleteUser($_POST["id_usuario"]);
-            header('Location: ../../pages/home/index.php');
-            break;
         default:
             echo 'Not found';
             break;
